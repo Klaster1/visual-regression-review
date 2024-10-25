@@ -129,7 +129,7 @@
 
   <script type="module">
     const onHashChange = () => {
-      const platform = location.hash.slice(1);
+      const platform = "tmp";
       document.querySelectorAll(".item").forEach((item) => {
         item.hidden = platform && item.dataset.platform !== platform;
       });
@@ -167,9 +167,9 @@
               item.querySelector("dt.test").textContent = result.test;
               item.querySelector("dt.name").textContent = result.name;
               item.querySelector('img[slot="first"]').src =
-                `/files/${result.platform}/${result.referenceFile}`;
+                `/files/${result.referenceFile}`;
               item.querySelector('img[slot="second"]').src =
-                `/files/${result.platform}/${result.diffFile}`;
+                `/files/${result.diffFile}`;
               item.querySelector(
                 'input[name="reference"][value="diff"]'
               ).checked = true;
@@ -218,7 +218,7 @@
         document.querySelectorAll("img-comparison-slider").forEach((slider) => {
           const result = JSON.parse(slider.closest(".item").dataset.result);
           slider.querySelector('img[slot="second"]').src =
-            `/files/${result.platform}/${result[`${event.target.value}File`]}`;
+            `/files/${result[`${event.target.value}File`]}`;
           slider
             .closest(".item")
             .querySelector(

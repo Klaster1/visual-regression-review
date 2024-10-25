@@ -24,6 +24,7 @@ interface Result {
   referenceFile: string;
   diffFile: string | null;
   currentFile: string | null;
+  platform: string;
 }
 
 const port = await getPort({ port: 4300 });
@@ -57,12 +58,11 @@ express()
       if (type !== "reference") return [];
       const referenceFile = file;
       const diffFile =
-        all.find((f) =>
-          f.includes(`[${fixture}] ${test} - ${name}.diff.png`)
-        ) ?? null;
+        all.find((f) => f.includes(`${fixture}__${test}__${name}.diff.png`)) ??
+        null;
       const currentFile =
         all.find((f) =>
-          f.includes(`[${fixture}] ${test} - ${name}.current.png`)
+          f.includes(`${fixture}__${test}__${name}.current.png`)
         ) ?? null;
       return [
         {
@@ -72,6 +72,7 @@ express()
           referenceFile,
           diffFile,
           currentFile,
+          platform: "tmp",
         },
       ];
     });
