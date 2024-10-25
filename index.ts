@@ -2,6 +2,18 @@ import express from "express";
 import { readdirSync } from "node:fs";
 import { rename, unlink } from "node:fs/promises";
 import getPort from "get-port";
+import { parseArgs } from "node:util";
+import { resolve } from "node:path";
+
+const args = parseArgs({
+  args: process.argv.slice(2),
+  options: {
+    path: {
+      type: "string",
+      alias: "p",
+    },
+  },
+});
 
 type Type = "reference" | "current" | "diff";
 
@@ -19,26 +31,30 @@ interface Result {
 
 const port = await getPort({ port: 4300 });
 
+if (!args.values.path) {
+  console.error("Missing path argument");
+  process.exit(1);
+}
+
+const path = resolve(args.values.path);
+
 express()
   .use(express.json())
   .get("/", (req, res) => {
     res.sendFile("./index.html", { root: "." });
   })
   .get("/files/:platform/:file", async (req, res) => {
-    res.sendFile(
-      `./e2e/visual-regression-screenshots/${req.params.platform}/${req.params.file}`,
-      { root: "." }
-    );
+    res.sendFile(`${path}/${req.params.platform}/${req.params.file}`, {
+      root: ".",
+    });
   })
   .get("/results", (req, res) => {
     const regex =
       /\[(?<fixture>.*?)\] (?<test>.*?) - (?<name>.*?).(?<type>reference|current|diff).png/;
-    const platforms = readdirSync("./e2e/visual-regression-screenshots");
+    const platforms = readdirSync(`./e2e/${path}`);
     /** @type {Result[]} */
     const results = platforms.flatMap((platform) => {
-      const files = readdirSync(
-        `./e2e/visual-regression-screenshots/${platform}`
-      );
+      const files = readdirSync(`${path}/${platform}`);
       return files.flatMap((file, index, all) => {
         const match = file.match(regex);
         const { fixture, test, name, type } = match?.groups as any;
@@ -73,18 +89,16 @@ express()
      * @type {Result}
      */
     const approval = req.body;
-    await unlink(
-      `./e2e/visual-regression-screenshots/${approval.platform}/${approval.diffFile}`
-    );
-    await unlink(
-      `./e2e/visual-regression-screenshots/${approval.platform}/${approval.referenceFile}`
-    );
+    await unlink(`${path}/${approval.platform}/${approval.diffFile}`);
+    await unlink(`${path}/${approval.platform}/${approval.referenceFile}`);
     await rename(
-      `./e2e/visual-regression-screenshots/${approval.platform}/${approval.currentFile}`,
-      `./e2e/visual-regression-screenshots/${approval.platform}/${approval.referenceFile}`
+      `${path}/${approval.platform}/${approval.currentFile}`,
+      `${path}/${approval.platform}/${approval.referenceFile}`
     );
     res.status(201).end();
   })
   .listen(port);
 
-console.log(`Visual regression review running at http://localhost:${port}/`);
+console.log(
+  `Comparing visual regression for ${path} at http://localhost:${port}/`
+);

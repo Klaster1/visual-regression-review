@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "run": "tsx index.ts"
+    "start": "tsx index.ts"
   },
   "type": "module",
   "keywords": [],
