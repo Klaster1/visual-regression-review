@@ -1,13 +1,22 @@
 <html>
   <head>
     <title>Visual Regression Review</title>
-    <script defer src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/index.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/styles.css" />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/index.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/styles.css"
+    />
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👁️</text></svg>"
     />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
   </head>
   <body>
     <main>
@@ -100,7 +109,7 @@
       margin: 0;
       font-weight: bold;
       &:after {
-        content: ':';
+        content: ":";
       }
     }
     img-comparison-slider {
@@ -121,11 +130,14 @@
   <script type="module">
     const onHashChange = () => {
       const platform = location.hash.slice(1);
-      document.querySelectorAll('.item').forEach((item) => {
+      document.querySelectorAll(".item").forEach((item) => {
         item.hidden = platform && item.dataset.platform !== platform;
       });
-      document.querySelectorAll('.platforms-nav a').forEach((link) => {
-        link.setAttribute('aria-current', link.textContent === platform ? 'page' : 'false');
+      document.querySelectorAll(".platforms-nav a").forEach((link) => {
+        link.setAttribute(
+          "aria-current",
+          link.textContent === platform ? "page" : "false"
+        );
       });
     };
     /**
@@ -138,77 +150,91 @@
      * @property {string | null} currentFile
      * @property {Platform} platform
      */
-    await fetch('/results')
+    await fetch("/results")
       .then((r) => r.json())
       .then(
         /** @param {Result[]} results */ (results) => {
           results
             .filter((result) => result.diffFile)
             .forEach((result) => {
-              const item = document.getElementById('item').content.cloneNode(true);
-              item.querySelector('.item').dataset.platform = result.platform;
-              item.querySelector('.item').dataset.result = JSON.stringify(result);
-              item.querySelector('dt.fixture').textContent = result.fixture;
-              item.querySelector('dt.test').textContent = result.test;
-              item.querySelector('dt.name').textContent = result.name;
-              item.querySelector('img[slot="first"]').src = `/files/${result.platform}/${result.referenceFile}`;
-              item.querySelector('img[slot="second"]').src = `/files/${result.platform}/${result.diffFile}`;
-              item.querySelector('input[name="reference"][value="diff"]').checked = true;
-              document.querySelector('.items').appendChild(item);
+              const item = document
+                .getElementById("item")
+                .content.cloneNode(true);
+              item.querySelector(".item").dataset.platform = result.platform;
+              item.querySelector(".item").dataset.result =
+                JSON.stringify(result);
+              item.querySelector("dt.fixture").textContent = result.fixture;
+              item.querySelector("dt.test").textContent = result.test;
+              item.querySelector("dt.name").textContent = result.name;
+              item.querySelector('img[slot="first"]').src =
+                `/files/${result.platform}/${result.referenceFile}`;
+              item.querySelector('img[slot="second"]').src =
+                `/files/${result.platform}/${result.diffFile}`;
+              item.querySelector(
+                'input[name="reference"][value="diff"]'
+              ).checked = true;
+              document.querySelector(".items").appendChild(item);
             });
 
-          const platforms = [...new Set(results.map((result) => result.platform))];
-          const platformItem = document.getElementById('platform-item');
-          const platformsNav = document.querySelector('.platforms-nav');
+          const platforms = [
+            ...new Set(results.map((result) => result.platform)),
+          ];
+          const platformItem = document.getElementById("platform-item");
+          const platformsNav = document.querySelector(".platforms-nav");
           platforms.forEach((platform) => {
             const item = platformItem.content.cloneNode(true);
-            item.querySelector('a').textContent = platform;
-            item.querySelector('a').href = `#${platform}`;
+            item.querySelector("a").textContent = platform;
+            item.querySelector("a").href = `#${platform}`;
             platformsNav.appendChild(item);
           });
 
-          if (location.hash === '') {
+          if (location.hash === "") {
             const firstPlatformWithDiffs = platforms.find((platform) =>
-              results.some((result) => result.platform === platform && result.diffFile),
+              results.some(
+                (result) => result.platform === platform && result.diffFile
+              )
             );
             if (firstPlatformWithDiffs) {
               location.hash = firstPlatformWithDiffs;
               onHashChange();
             }
           }
-        },
+        }
       );
-    document.addEventListener('click', async (event) => {
-      if (event.target.tagName !== 'BUTTON') return;
-      await fetch('/approvals', {
-        method: 'POST',
+    document.addEventListener("click", async (event) => {
+      if (event.target.tagName !== "BUTTON") return;
+      await fetch("/approvals", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: event.target.closest('.item').dataset.result,
+        body: event.target.closest(".item").dataset.result,
       }).then(() => {
-        event.target.closest('.item').remove();
+        event.target.closest(".item").remove();
       });
     });
-    document.addEventListener('change', (event) => {
-      if (event.target.type === 'radio') {
-        document.querySelectorAll('img-comparison-slider').forEach((slider) => {
-          const result = JSON.parse(slider.closest('.item').dataset.result);
+    document.addEventListener("change", (event) => {
+      if (event.target.type === "radio") {
+        document.querySelectorAll("img-comparison-slider").forEach((slider) => {
+          const result = JSON.parse(slider.closest(".item").dataset.result);
           slider.querySelector('img[slot="second"]').src =
             `/files/${result.platform}/${result[`${event.target.value}File`]}`;
-          slider.closest('.item').querySelector(`input[name="reference"][value="${event.target.value}"]`).checked =
-            true;
+          slider
+            .closest(".item")
+            .querySelector(
+              `input[name="reference"][value="${event.target.value}"]`
+            ).checked = true;
         });
       }
     });
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'c' || event.key === 'd') {
-        const value = event.key === 'c' ? 'current' : 'diff';
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "c" || event.key === "d") {
+        const value = event.key === "c" ? "current" : "diff";
         document
           .querySelector(`input[name="reference"][value="${value}"]`)
-          .dispatchEvent(new Event('change', { bubbles: true }));
+          .dispatchEvent(new Event("change", { bubbles: true }));
       }
     });
-    window.addEventListener('hashchange', onHashChange);
+    window.addEventListener("hashchange", onHashChange);
   </script>
 </html>

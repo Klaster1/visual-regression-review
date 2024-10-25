@@ -17,8 +17,6 @@ const args = parseArgs({
 
 type Type = "reference" | "current" | "diff";
 
-type Platform = "linux" | "windows" | "unknown";
-
 interface Result {
   fixture: string;
   test: string;
@@ -26,7 +24,6 @@ interface Result {
   referenceFile: string;
   diffFile: string | null;
   currentFile: string | null;
-  platform: Platform;
 }
 
 const port = await getPort({ port: 4300 });
@@ -36,50 +33,47 @@ if (!args.values.path) {
   process.exit(1);
 }
 
-const path = resolve(args.values.path);
+const path = args.values.path;
 
 express()
   .use(express.json())
   .get("/", (req, res) => {
     res.sendFile("./index.html", { root: "." });
   })
-  .get("/files/:platform/:file", async (req, res) => {
-    res.sendFile(`${path}/${req.params.platform}/${req.params.file}`, {
-      root: ".",
+  .get("/files/:file", async (req, res) => {
+    res.sendFile(`${req.params.file}`, {
+      root: path,
     });
   })
   .get("/results", (req, res) => {
     const regex =
-      /\[(?<fixture>.*?)\] (?<test>.*?) - (?<name>.*?).(?<type>reference|current|diff).png/;
-    const platforms = readdirSync(`./e2e/${path}`);
+      /(?<fixture>.*?)__(?<test>.*?)__(?<name>.*?).(?<type>reference|current|diff).png/;
     /** @type {Result[]} */
-    const results = platforms.flatMap((platform) => {
-      const files = readdirSync(`${path}/${platform}`);
-      return files.flatMap((file, index, all) => {
-        const match = file.match(regex);
-        const { fixture, test, name, type } = match?.groups as any;
-        if (type !== "reference") return [];
-        const referenceFile = file;
-        const diffFile =
-          all.find((f) =>
-            f.includes(`[${fixture}] ${test} - ${name}.diff.png`)
-          ) ?? null;
-        const currentFile =
-          all.find((f) =>
-            f.includes(`[${fixture}] ${test} - ${name}.current.png`)
-          ) ?? null;
-        return [
-          {
-            fixture,
-            test,
-            name,
-            referenceFile,
-            diffFile,
-            currentFile,
-            platform,
-          },
-        ];
-      });
+    const files = readdirSync(`${path}`);
+    const results = files.flatMap((file, index, all) => {
+      const match = file.match(regex);
+      if (!match) return [];
+      const { fixture, test, name, type } = match?.groups as any;
+      if (type !== "reference") return [];
+      const referenceFile = file;
+      const diffFile =
+        all.find((f) =>
+          f.includes(`[${fixture}] ${test} - ${name}.diff.png`)
+        ) ?? null;
+      const currentFile =
+        all.find((f) =>
+          f.includes(`[${fixture}] ${test} - ${name}.current.png`)
+        ) ?? null;
+      return [
+        {
+          fixture,
+          test,
+          name,
+          referenceFile,
+          diffFile,
+          currentFile,
+        },
+      ];
     });
 
     res.json(results);
@@ -89,11 +83,11 @@ express()
      * @type {Result}
      */
     const approval = req.body;
-    await unlink(`${path}/${approval.platform}/${approval.diffFile}`);
-    await unlink(`${path}/${approval.platform}/${approval.referenceFile}`);
+    await unlink(`${path}/${approval.diffFile}`);
+    await unlink(`${path}/${approval.referenceFile}`);
     await rename(
-      `${path}/${approval.platform}/${approval.currentFile}`,
-      `${path}/${approval.platform}/${approval.referenceFile}`
+      `${path}/${approval.currentFile}`,
+      `${path}/${approval.referenceFile}`
     );
     res.status(201).end();
   })
