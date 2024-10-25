@@ -2,11 +2,13 @@
   "name": "e2e-screenshot-diff",
   "version": "1.0.0",
   "main": "src/index.ts",
-  "bin": "",
+  "bin": {
+    "esd": "dist/index.mjs"
+  },
   "scripts": {
     "start": "npx tsx src/index.ts",
     "start:dev": "npx tsx watch src/index.ts",
-    "build": "pkgroll"
+    "build": "pkgroll && npm link"
   },
   "exports": "./dist/index.mjs",
   "type": "module",

@@ -1,8 +1,11 @@
+#!/usr/bin/env node
+
 import express from "express";
 import { readdirSync } from "node:fs";
 import { rename, unlink } from "node:fs/promises";
 import getPort from "get-port";
 import { parseArgs } from "node:util";
+import { resolve } from "node:path";
 
 const args = parseArgs({
   args: process.argv.slice(2),
@@ -38,7 +41,7 @@ const path = args.values.path;
 express()
   .use(express.json())
   .get("/", (req, res) => {
-    res.sendFile("index.html", { root: "." });
+    res.sendFile("index.html", { root: resolve(import.meta.dirname, "..") });
   })
   .get("/files/:file", async (req, res) => {
     res.sendFile(`${req.params.file}`, {
