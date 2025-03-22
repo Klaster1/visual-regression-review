@@ -34,6 +34,16 @@ aside {
   }
 }
 section {
+  li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+
   article {
     display: grid;
     grid-template-columns: 1fr;
@@ -41,10 +51,6 @@ section {
     box-sizing: border-box;
     border-width: 1px;
     border-style: solid;
-
-    &:not(:last-child) {
-      margin-bottom: 10px;
-    }
 
     header {
       display: grid;

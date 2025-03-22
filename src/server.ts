@@ -31,26 +31,28 @@ export const server = (port: number, path: string) => {
     });
   };
 
+  const approveResult = async (resultName: string) => {
+    const results = getResults();
+    const approval = results.find((result) => result.name === resultName);
+
+    if (!approval) {
+      return;
+    }
+
+    await unlink(`${path}/${approval.diffFile}`);
+    await unlink(`${path}/${approval.referenceFile}`);
+    await rename(
+      `${path}/${approval.currentFile}`,
+      `${path}/${approval.referenceFile}`
+    );
+  };
+
   express()
     .get("/", (req, res) => {
       res.send(template(getResults()));
     })
     .post("/approvals/:resultName", async (req, res) => {
-      const resultName = req.params.resultName;
-      const results = getResults();
-      const approval = results.find((result) => result.name === resultName);
-
-      if (!approval) {
-        res.status(404).end();
-        return;
-      }
-
-      await unlink(`${path}/${approval.diffFile}`);
-      await unlink(`${path}/${approval.referenceFile}`);
-      await rename(
-        `${path}/${approval.currentFile}`,
-        `${path}/${approval.referenceFile}`
-      );
+      await approveResult(req.params.resultName);
       res.redirect("/");
     })
     .use(express.static(resolve(import.meta.dirname, "web")))
@@ -59,6 +61,5 @@ export const server = (port: number, path: string) => {
         root: path,
       });
     })
-
     .listen(port);
 };

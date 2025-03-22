@@ -38,38 +38,40 @@ export const template = (results: Result[]) =>
           <ul>
             ${results.map(
               (result) =>
-                html`<article [data-result]="${JSON.stringify(result)}">
-                  <header>
-                    <h1 id="${result.name}">${result.name}</h1>
-                    <form method="post" action="/approvals/${result.name}">
-                      <fieldset>
-                        <legend>Compare against</legend>
-                        <label>
-                          <input
-                            type="radio"
-                            name="reference"
-                            value="diff"
-                            checked
-                          />
-                          Diff
-                        </label>
-                        <label>
-                          <input
-                            type="radio"
-                            name="reference"
-                            value="current"
-                          />
-                          Current
-                        </label>
-                      </fieldset>
-                      <button type="submit">Approve</button>
-                    </form>
-                  </header>
-                  <img-comparison-slider>
-                    <img slot="first" src="/files/${result.referenceFile}" />
-                    <img slot="second" src="/files/${result.diffFile}" />
-                  </img-comparison-slider>
-                </article>`
+                html`<li>
+                  <article [data-result]="${JSON.stringify(result)}">
+                    <header>
+                      <h1 id="${result.name}">${result.name}</h1>
+                      <form method="post" action="/approvals/${result.name}">
+                        <fieldset>
+                          <legend>Compare against</legend>
+                          <label>
+                            <input
+                              type="radio"
+                              name="reference"
+                              value="diff"
+                              checked
+                            />
+                            Diff
+                          </label>
+                          <label>
+                            <input
+                              type="radio"
+                              name="reference"
+                              value="current"
+                            />
+                            Current
+                          </label>
+                        </fieldset>
+                        <button type="submit">Approve</button>
+                      </form>
+                    </header>
+                    <img-comparison-slider>
+                      <img slot="first" src="/files/${result.referenceFile}" />
+                      <img slot="second" src="/files/${result.diffFile}" />
+                    </img-comparison-slider>
+                  </article>
+                </li>`
             )}
           </ul>
           <span class="done">No regressions! 🎉</span>
