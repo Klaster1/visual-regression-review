@@ -4,13 +4,7 @@ import express from "express";
 import { readdirSync } from "node:fs";
 import { rename, unlink } from "node:fs/promises";
 import { resolve } from "node:path";
-
-interface Result {
-  name: string;
-  referenceFile: string;
-  diffFile: string | null;
-  currentFile: string | null;
-}
+import type { Result } from "../types.ts";
 
 export const server = (port: number, path: string) => {
   express()

@@ -20,51 +20,46 @@
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
+    <!-- Templates -->
+    <template id="nav-item-template">
+      <li><a href="" role="link"></a></li>
+    </template>
+    <template id="result-item-template">
+      <article>
+        <header>
+          <h1></h1>
+          <form>
+            <fieldset>
+              <legend>Compare against</legend>
+              <label>
+                <input type="radio" name="reference" value="diff" />
+                Diff
+              </label>
+              <label>
+                <input type="radio" name="reference" value="current" />
+                Current
+              </label>
+            </fieldset>
+            <button type="button">Approve</button>
+          </form>
+        </header>
+        <img-comparison-slider>
+          <img slot="first" />
+          <img slot="second" />
+        </img-comparison-slider>
+      </article>
+    </template>
+    <!-- Markup -->
     <main>
       <aside>
         <nav>
-          <template id="platform-item">
-            <li><a href="" role="link"></a></li>
-          </template>
-          <ul class="platforms-nav"></ul>
+          <ul></ul>
         </nav>
       </aside>
-      <template id="item">
-        <article class="item">
-          <header>
-            <dl>
-              <dd class="fixture">Fixture</dd>
-              <dt class="fixture"></dt>
-
-              <dd class="test">Test</dd>
-              <dt class="test"></dt>
-
-              <dd class="name">Name</dd>
-              <dt class="name"></dt>
-            </dl>
-            <form>
-              <fieldset>
-                <legend>Compare against</legend>
-                <label>
-                  <input type="radio" name="reference" value="diff" />
-                  Diff
-                </label>
-                <label>
-                  <input type="radio" name="reference" value="current" />
-                  Current
-                </label>
-              </fieldset>
-              <button type="button">Approve</button>
-            </form>
-          </header>
-          <img-comparison-slider>
-            <img slot="first" />
-            <img slot="second" />
-          </img-comparison-slider>
-        </article>
-      </template>
-      <section class="items"></section>
-      <span class="done">No regressions! 🎉</span>
+      <section class="items">
+        <ul></ul>
+        <span class="done">No regressions! 🎉</span>
+      </section>
     </main>
   </body>
 

@@ -1,24 +1,5 @@
-const onHashChange = () => {
-  const platform = "tmp";
-  document.querySelectorAll(".item").forEach((item) => {
-    item.hidden = platform && item.dataset.platform !== platform;
-  });
-  document.querySelectorAll(".platforms-nav a").forEach((link) => {
-    link.setAttribute(
-      "aria-current",
-      link.textContent === platform ? "page" : "false"
-    );
-  });
-};
 /**
- * @typedef {Object} Result
- * @property {string} fixture
- * @property {string} test
- * @property {string} name
- * @property {string} referenceFile
- * @property {string | null} failureFile
- * @property {string | null} currentFile
- * @property {Platform} platform
+ * @typedef {import('../types.ts').Result} Result
  */
 await fetch("/results")
   .then((r) => r.json())
@@ -27,42 +8,55 @@ await fetch("/results")
       results
         .filter((result) => result.diffFile)
         .forEach((result) => {
-          const item = document.getElementById("item").content.cloneNode(true);
-          item.querySelector(".item").dataset.platform = result.platform;
-          item.querySelector(".item").dataset.result = JSON.stringify(result);
-          item.querySelector("dt.fixture").textContent = result.fixture;
-          item.querySelector("dt.test").textContent = result.test;
-          item.querySelector("dt.name").textContent = result.name;
-          item.querySelector('img[slot="first"]').src =
-            `/files/${result.referenceFile}`;
-          item.querySelector('img[slot="second"]').src =
-            `/files/${result.diffFile}`;
-          item.querySelector('input[name="reference"][value="diff"]').checked =
-            true;
-          document.querySelector(".items").appendChild(item);
+          const itemTemplate = document.querySelector(
+            "template#result-item-template"
+          );
+          const navItemTemplate = document.querySelector(
+            "template#nav-item-template"
+          );
+
+          if (!(itemTemplate instanceof HTMLTemplateElement)) return;
+          if (!(navItemTemplate instanceof HTMLTemplateElement)) return;
+
+          const item = itemTemplate.content.cloneNode(true);
+          const navItem = navItemTemplate.content.cloneNode(true);
+          if (!item || !(item instanceof DocumentFragment)) return;
+          if (!navItem || !(navItem instanceof DocumentFragment)) return;
+
+          const article = item.querySelector("article");
+          const heading = item.querySelector("h1");
+          const imgFirst = item.querySelector('img[slot="first"]');
+          const imgSecond = item.querySelector('img[slot="second"]');
+          const inputDiff = item.querySelector(
+            'input[name="reference"][value="diff"]'
+          );
+          const itemsContainer = document.querySelector(".items>ul");
+          const navItemLink = navItem.querySelector("a");
+          const navList = document.querySelector("nav");
+
+          if (!(article instanceof HTMLElement)) return;
+          if (!(heading instanceof HTMLHeadingElement)) return;
+          if (!(imgFirst instanceof HTMLImageElement)) return;
+          if (!(imgSecond instanceof HTMLImageElement)) return;
+          if (!(inputDiff instanceof HTMLInputElement)) return;
+          if (!(itemsContainer instanceof HTMLElement)) return;
+          if (!(navItemLink instanceof HTMLAnchorElement)) return;
+          if (!(navList instanceof HTMLElement)) return;
+
+          // Result
+          article.dataset.result = JSON.stringify(result);
+          heading.textContent = result.name;
+          heading.id = result.name;
+          imgFirst.src = `/files/${result.referenceFile}`;
+          imgSecond.src = `/files/${result.diffFile}`;
+          inputDiff.checked = true;
+          itemsContainer.appendChild(item);
+
+          // Nav
+          navItemLink.textContent = result.name;
+          navItemLink.href = `#${result.name}`;
+          navList.appendChild(navItem);
         });
-
-      const platforms = [...new Set(results.map((result) => result.platform))];
-      const platformItem = document.getElementById("platform-item");
-      const platformsNav = document.querySelector(".platforms-nav");
-      platforms.forEach((platform) => {
-        const item = platformItem.content.cloneNode(true);
-        item.querySelector("a").textContent = platform;
-        item.querySelector("a").href = `#${platform}`;
-        platformsNav.appendChild(item);
-      });
-
-      if (location.hash === "") {
-        const firstPlatformWithDiffs = platforms.find((platform) =>
-          results.some(
-            (result) => result.platform === platform && result.diffFile
-          )
-        );
-        if (firstPlatformWithDiffs) {
-          location.hash = firstPlatformWithDiffs;
-          onHashChange();
-        }
-      }
     }
   );
 document.addEventListener("click", async (event) => {
