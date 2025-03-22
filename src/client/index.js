@@ -104,7 +104,8 @@ document.addEventListener("keydown", (event) => {
     const currentLink = document.querySelector(`nav a[href="${currentHash}"]`);
     if (!(currentLink instanceof HTMLAnchorElement)) return;
     const nextLink =
-      currentLink.parentElement?.nextElementSibling?.querySelector("a");
+      currentLink.parentElement?.nextElementSibling?.querySelector("a") ??
+      document.querySelector("nav ol li:first-child a");
     if (nextLink instanceof HTMLAnchorElement && nextLink.hash) {
       window.location.hash = nextLink.hash;
     }
@@ -113,7 +114,8 @@ document.addEventListener("keydown", (event) => {
     const currentLink = document.querySelector(`nav a[href="${currentHash}"]`);
     if (!(currentLink instanceof HTMLAnchorElement)) return;
     const prevLink =
-      currentLink.parentElement?.previousElementSibling?.querySelector("a");
+      currentLink.parentElement?.previousElementSibling?.querySelector("a") ??
+      document.querySelector("nav ol li:last-child a");
     if (prevLink instanceof HTMLAnchorElement && prevLink.hash) {
       window.location.hash = prevLink.hash;
     }
