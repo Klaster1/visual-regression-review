@@ -11,6 +11,7 @@ main {
   display: grid;
   grid-template-columns: 300px minmax(auto, 1920px);
   justify-content: center;
+  position: relative;
 
   font-family: sans-serif;
   gap: 10px;
@@ -66,6 +67,10 @@ section {
       display: grid;
       grid-template-columns: 1fr auto;
       padding: 10px;
+      position: sticky;
+      top: 10px;
+      z-index: 2;
+      background: white;
 
       h1 {
         margin-top: 0;
