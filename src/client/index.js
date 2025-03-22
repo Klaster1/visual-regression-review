@@ -99,5 +99,23 @@ document.addEventListener("keydown", (event) => {
     );
     if (!(referenceInput instanceof HTMLInputElement)) return;
     referenceInput.dispatchEvent(new Event("change", { bubbles: true }));
+  } else if (event.key === "j") {
+    const currentHash = window.location.hash;
+    const currentLink = document.querySelector(`nav a[href="${currentHash}"]`);
+    if (!(currentLink instanceof HTMLAnchorElement)) return;
+    const nextLink =
+      currentLink.parentElement?.nextElementSibling?.querySelector("a");
+    if (nextLink instanceof HTMLAnchorElement && nextLink.hash) {
+      window.location.hash = nextLink.hash;
+    }
+  } else if (event.key === "k") {
+    const currentHash = window.location.hash;
+    const currentLink = document.querySelector(`nav a[href="${currentHash}"]`);
+    if (!(currentLink instanceof HTMLAnchorElement)) return;
+    const prevLink =
+      currentLink.parentElement?.previousElementSibling?.querySelector("a");
+    if (prevLink instanceof HTMLAnchorElement && prevLink.hash) {
+      window.location.hash = prevLink.hash;
+    }
   }
 });
