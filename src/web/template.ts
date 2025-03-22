@@ -23,16 +23,31 @@ export const template = (results: Result[]) =>
     <body>
       <main>
         <aside>
-          <nav>
-            <ol>
-              ${results.map(
-                (result) =>
-                  html`<li>
-                    <a href="#${result.name}">${result.name}</a>
-                  </li>`
-              )}
-            </ol>
-          </nav>
+          <div class="content">
+            <form>
+              <fieldset>
+                <legend>Compare against</legend>
+                <label>
+                  <input type="radio" name="reference" value="diff" checked />
+                  Diff
+                </label>
+                <label>
+                  <input type="radio" name="reference" value="current" />
+                  Current
+                </label>
+              </fieldset>
+            </form>
+            <nav>
+              <ol>
+                ${results.map(
+                  (result) =>
+                    html`<li>
+                      <a href="#${result.name}">${result.name}</a>
+                    </li>`
+                )}
+              </ol>
+            </nav>
+          </div>
         </aside>
         <section class="items">
           <ul>
@@ -43,26 +58,6 @@ export const template = (results: Result[]) =>
                     <header>
                       <h1 id="${result.name}">${result.name}</h1>
                       <form method="post" action="/approvals/${result.name}">
-                        <fieldset>
-                          <legend>Compare against</legend>
-                          <label>
-                            <input
-                              type="radio"
-                              name="reference"
-                              value="diff"
-                              checked
-                            />
-                            Diff
-                          </label>
-                          <label>
-                            <input
-                              type="radio"
-                              name="reference"
-                              value="current"
-                            />
-                            Current
-                          </label>
-                        </fieldset>
                         <button type="submit">Approve</button>
                       </form>
                     </header>
