@@ -12,21 +12,6 @@ const handleHashChange = () => {
 
 window.addEventListener("hashchange", handleHashChange);
 
-document.addEventListener("click", async (event) => {
-  if (!(event.target instanceof HTMLButtonElement)) return;
-  const item = event.target.closest("article");
-  if (!(item instanceof HTMLElement)) return;
-  await fetch("/approvals", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: item.dataset.result,
-  }).then(() => {
-    item.remove();
-  });
-});
-
 document.addEventListener("change", (event) => {
   if (!(event.target instanceof HTMLInputElement)) return;
   const value = event.target.value;

@@ -40,7 +40,7 @@ export const template = (results: Result[]) =>
                 html`<article [data-result]="${JSON.stringify(result)}">
                   <header>
                     <h1 id="${result.name}">${result.name}</h1>
-                    <form>
+                    <form method="post" action="/approvals/${result.name}">
                       <fieldset>
                         <legend>Compare against</legend>
                         <label>
@@ -61,7 +61,7 @@ export const template = (results: Result[]) =>
                           Current
                         </label>
                       </fieldset>
-                      <button type="button">Approve</button>
+                      <button type="submit">Approve</button>
                     </form>
                   </header>
                   <img-comparison-slider>
