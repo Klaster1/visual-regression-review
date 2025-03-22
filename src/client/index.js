@@ -32,7 +32,7 @@ await fetch("/results")
           );
           const itemsContainer = document.querySelector(".items>ul");
           const navItemLink = navItem.querySelector("a");
-          const navList = document.querySelector("nav");
+          const navList = document.querySelector("nav>ol");
 
           if (!(article instanceof HTMLElement)) return;
           if (!(heading instanceof HTMLHeadingElement)) return;
@@ -93,4 +93,3 @@ document.addEventListener("keydown", (event) => {
       .dispatchEvent(new Event("change", { bubbles: true }));
   }
 });
-window.addEventListener("hashchange", onHashChange);
