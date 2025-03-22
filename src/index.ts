@@ -49,32 +49,24 @@ express()
     });
   })
   .get("/results", (req, res) => {
-    const regex =
-      /(?<fixture>.*?)__(?<test>.*?)__(?<name>.*?).(?<type>reference|current|diff).png/;
+    const regex = /(?<name>.*?).(?<type>reference|current|diff).png/;
     /** @type {Result[]} */
     const files = readdirSync(`${path}`);
     const results = files.flatMap((file, index, all) => {
       const match = file.match(regex);
       if (!match) return [];
-      const { fixture, test, name, type } = match?.groups as any;
+      const { name, type } = match?.groups as any;
       if (type !== "reference") return [];
       const referenceFile = file;
-      const diffFile =
-        all.find((f) => f.includes(`${fixture}__${test}__${name}.diff.png`)) ??
-        null;
+      const diffFile = all.find((f) => f.includes(`${name}.diff.png`)) ?? null;
       const currentFile =
-        all.find((f) =>
-          f.includes(`${fixture}__${test}__${name}.current.png`)
-        ) ?? null;
+        all.find((f) => f.includes(`${name}.current.png`)) ?? null;
       return [
         {
-          fixture,
-          test,
           name,
           referenceFile,
           diffFile,
           currentFile,
-          platform: "tmp",
         },
       ];
     });

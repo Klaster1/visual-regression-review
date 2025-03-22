@@ -3,29 +3,25 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "bin": {
-    "esd": "dist/index.mjs"
+    "esd": "src/index.ts"
   },
   "scripts": {
-    "start": "npx tsx src/index.ts",
-    "start:dev": "npx tsx watch src/index.ts",
-    "build": "pkgroll && npm link"
+    "start": "src/index.ts"
   },
-  "exports": "./dist/index.mjs",
+  "exports": "./src/index.ts",
   "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.7.9",
-    "express": "^4.21.1",
-    "get-port": "^7.1.0",
-    "tsx": "^4.19.1"
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.11",
+    "express": "^5.0.1",
+    "get-port": "^7.1.0"
   },
   "devDependencies": {
-    "pkgroll": "^2.5.0",
-    "prettier": "^3.3.3",
-    "typescript": "^5.6.3"
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
   }
 }
