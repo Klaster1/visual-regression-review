@@ -84,7 +84,7 @@ section {
     }
   }
 
-  ul:not(:empty) + .done {
+  ul:has(li) + .done {
     display: none;
   }
 
