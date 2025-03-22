@@ -7,6 +7,24 @@ body {
   box-sizing: border-box;
 }
 
+:root {
+  --app-background-color: #f0f0f0;
+  --panel-background-color: white;
+  --panel-border-color: black;
+  --panel-border-width: 1px;
+  --panel-border-radius: 5px;
+  --panel-gap: 20px;
+
+  --link-color: blue;
+  --link-color-hover: darkblue;
+
+  --button-background-color: #f0f0f0;
+  --button-border-color: black;
+  --button-border-width: 1px;
+  --button-border-radius: 5px;
+  --button-color: black;
+}
+
 main {
   display: grid;
   grid-template-columns: 300px minmax(auto, 1920px);
@@ -18,6 +36,7 @@ main {
   margin: 0;
   padding: 0;
   font-size: 16px;
+  background-color: var(--app-background-color);
 }
 aside {
   form {
@@ -45,6 +64,11 @@ aside {
   }
 }
 section {
+  ul {
+    margin: 0;
+    padding: 10px;
+  }
+
   li {
     list-style: none;
     margin: 0;
@@ -56,40 +80,30 @@ section {
   }
 
   article {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
-    border-width: 1px;
-    border-style: solid;
 
     header {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
       position: sticky;
       top: 10px;
       z-index: 2;
       background: white;
 
       h1 {
-        margin-top: 0;
-        padding-top: 20px;
+        padding: 0;
+        margin: 0;
+        font-weight: normal;
       }
 
       form {
-        display: flex;
-        margin: 0;
-        gap: 20px;
-
-        fieldset {
-          height: 40px;
-        }
-
         button {
           position: relative;
           top: 8px;
-          height: 51px;
         }
       }
     }
@@ -118,5 +132,49 @@ section {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+}
+
+/* Theme */
+.panel {
+  background-color: var(--panel-background-color);
+  border-color: var(--panel-border-color);
+  border-radius: var(--panel-border-radius);
+
+  .panel-header {
+    padding: var(--panel-gap);
+  }
+  .panel-content {
+    margin: var(--panel-gap);
+  }
+}
+a {
+  color: var(--link-color);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--link-color-hover);
+  }
+}
+button {
+  background-color: var(--button-background-color);
+  border-color: var(--button-border-color);
+  border-width: var(--button-border-width);
+  border-radius: var(--button-border-radius);
+  color: var(--button-color);
+  padding: 5px 10px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    border-color 0.3s;
+  height: 40px;
+
+  &:hover {
+    background-color: var(--button-color);
+    color: var(--button-background-color);
+    border-color: var(--button-color);
   }
 }

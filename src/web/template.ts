@@ -54,14 +54,14 @@ export const template = (results: Result[]) =>
             ${results.map(
               (result) =>
                 html`<li>
-                  <article>
-                    <header>
-                      <h1 id="${result.name}">${result.name}</h1>
+                  <article class="panel" id="${result.name}">
+                    <header class="panel-header">
+                      <h1>${result.name}</h1>
                       <form method="post" action="/approvals/${result.name}">
                         <button type="submit">Approve</button>
                       </form>
                     </header>
-                    <img-comparison-slider>
+                    <img-comparison-slider class="panel-content">
                       <img slot="first" src="/files/${result.referenceFile}" />
                       <img
                         slot="second"

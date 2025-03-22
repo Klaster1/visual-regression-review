@@ -92,6 +92,6 @@ const observer = new IntersectionObserver(
   { threshold: [0.1] }
 );
 
-document.querySelectorAll("h1").forEach((heading) => {
+document.querySelectorAll("article").forEach((heading) => {
   observer.observe(heading);
 });
