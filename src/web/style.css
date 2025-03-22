@@ -131,6 +131,11 @@ section {
     }
 
     img-comparison-slider {
+      --divider-width: 2px;
+      --divider-color: magenta;
+      --default-handle-color: magenta;
+      --default-handle-opacity: 1;
+
       grid-column: span 2;
       container-type: inline-size;
 
