@@ -1,6 +1,6 @@
 export interface Result {
   name: string;
   referenceFile: string;
-  diffFile: string | null;
+  diffFile: string;
   currentFile: string | null;
 }

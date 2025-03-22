@@ -77,69 +77,6 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-/**
- * @typedef {import('../types.ts').Result} Result
- */
-await fetch("/results")
-  .then((r) => r.json())
-  .then(
-    /** @param {Result[]} results */ (results) => {
-      results
-        .filter((result) => result.diffFile)
-        .forEach((result) => {
-          const itemTemplate = document.querySelector(
-            "template#result-item-template"
-          );
-          const navItemTemplate = document.querySelector(
-            "template#nav-item-template"
-          );
-
-          if (!(itemTemplate instanceof HTMLTemplateElement)) return;
-          if (!(navItemTemplate instanceof HTMLTemplateElement)) return;
-
-          const item = itemTemplate.content.cloneNode(true);
-          const navItem = navItemTemplate.content.cloneNode(true);
-          if (!item || !(item instanceof DocumentFragment)) return;
-          if (!navItem || !(navItem instanceof DocumentFragment)) return;
-
-          const article = item.querySelector("article");
-          const heading = item.querySelector("h1");
-          const imgFirst = item.querySelector('img[slot="first"]');
-          const imgSecond = item.querySelector('img[slot="second"]');
-          const inputDiff = item.querySelector(
-            'input[name="reference"][value="diff"]'
-          );
-          const itemsContainer = document.querySelector(".items>ul");
-          const navItemLink = navItem.querySelector("a");
-          const navList = document.querySelector("nav>ol");
-
-          if (!(article instanceof HTMLElement)) return;
-          if (!(heading instanceof HTMLHeadingElement)) return;
-          if (!(imgFirst instanceof HTMLImageElement)) return;
-          if (!(imgSecond instanceof HTMLImageElement)) return;
-          if (!(inputDiff instanceof HTMLInputElement)) return;
-          if (!(itemsContainer instanceof HTMLElement)) return;
-          if (!(navItemLink instanceof HTMLAnchorElement)) return;
-          if (!(navList instanceof HTMLElement)) return;
-
-          // Result
-          article.dataset.result = JSON.stringify(result);
-          heading.textContent = result.name;
-          heading.id = result.name;
-          imgFirst.src = `/files/${result.referenceFile}`;
-          imgSecond.src = `/files/${result.diffFile}`;
-          inputDiff.checked = true;
-          itemsContainer.appendChild(item);
-
-          // Nav
-          navItemLink.textContent = result.name;
-          navItemLink.href = `#${result.name}`;
-          navList.appendChild(navItem);
-        });
-      handleHashChange();
-    }
-  );
-
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {

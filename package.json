@@ -18,7 +18,8 @@
     "@types/express": "^5.0.1",
     "@types/node": "^22.13.11",
     "express": "^5.0.1",
-    "get-port": "^7.1.0"
+    "get-port": "^7.1.0",
+    "html-template-tag": "^4.1.1"
   },
   "devDependencies": {
     "prettier": "^3.5.3",
