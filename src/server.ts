@@ -4,8 +4,7 @@ import express from "express";
 import { readdirSync } from "node:fs";
 import { rename, unlink } from "node:fs/promises";
 import { resolve } from "node:path";
-import type { Result } from "../types.ts";
-import { template } from "../client/index.html.ts";
+import { template } from "./web/template.ts";
 
 export const server = (port: number, path: string) => {
   const getResults = () => {
@@ -54,7 +53,7 @@ export const server = (port: number, path: string) => {
       );
       res.redirect("/");
     })
-    .use(express.static(resolve(import.meta.dirname, "..", "client")))
+    .use(express.static(resolve(import.meta.dirname, "web")))
     .get("/files/:file", async (req, res) => {
       res.sendFile(`${req.params.file}`, {
         root: path,

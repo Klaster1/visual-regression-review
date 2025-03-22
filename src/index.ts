@@ -2,7 +2,7 @@
 
 import getPort from "get-port";
 import { parseArgs } from "node:util";
-import { server } from "./server/index.ts";
+import { server } from "./server.ts";
 
 const args = parseArgs({
   args: process.argv.slice(2),
