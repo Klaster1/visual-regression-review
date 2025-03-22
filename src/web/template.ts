@@ -39,7 +39,7 @@ export const template = (results: Result[]) =>
             ${results.map(
               (result) =>
                 html`<li>
-                  <article [data-result]="${JSON.stringify(result)}">
+                  <article>
                     <header>
                       <h1 id="${result.name}">${result.name}</h1>
                       <form method="post" action="/approvals/${result.name}">
@@ -68,7 +68,17 @@ export const template = (results: Result[]) =>
                     </header>
                     <img-comparison-slider>
                       <img slot="first" src="/files/${result.referenceFile}" />
-                      <img slot="second" src="/files/${result.diffFile}" />
+                      <img
+                        slot="second"
+                        src="/files/${result.diffFile}"
+                        data-mode="diff"
+                      />
+                      <img
+                        slot="second"
+                        src="/files/${result.currentFile}"
+                        data-mode="current"
+                        hidden
+                      />
                     </img-comparison-slider>
                   </article>
                 </li>`

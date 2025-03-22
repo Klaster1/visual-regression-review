@@ -12,33 +12,51 @@ const handleHashChange = () => {
 
 window.addEventListener("hashchange", handleHashChange);
 
+/**
+ * @param {import('../types.ts').DiffMode} mode
+ */
+const toggleDiffMode = (mode) => {
+  const diffRadios = document.querySelectorAll(
+    'input[name="reference"][value="diff"]'
+  );
+  const currentRadios = document.querySelectorAll(
+    'input[name="reference"][value="current"]'
+  );
+  const diffImages = document.querySelectorAll(
+    'img[slot="second"][data-mode="diff"]'
+  );
+  const currentImages = document.querySelectorAll(
+    'img[slot="second"][data-mode="current"]'
+  );
+  diffRadios.forEach((radio) => {
+    if (!(radio instanceof HTMLInputElement)) return;
+    radio.checked = mode === "diff";
+  });
+  currentRadios.forEach((radio) => {
+    if (!(radio instanceof HTMLInputElement)) return;
+    radio.checked = mode === "current";
+  });
+  diffImages.forEach((image) => {
+    if (!(image instanceof HTMLImageElement)) return;
+    image.hidden = mode !== "diff";
+  });
+  currentImages.forEach((image) => {
+    if (!(image instanceof HTMLImageElement)) return;
+    image.hidden = mode !== "current";
+  });
+};
+
 document.addEventListener("change", (event) => {
   if (!(event.target instanceof HTMLInputElement)) return;
   const value = event.target.value;
-  document.querySelectorAll("img-comparison-slider").forEach((slider) => {
-    if (!(slider instanceof HTMLElement)) return;
-    const item = slider.closest("article");
-    if (!(item instanceof HTMLElement) || !item.dataset.result) return;
-    const result = JSON.parse(item.dataset.result);
-    const secondImage = slider.querySelector('img[slot="second"]');
-    if (!(secondImage instanceof HTMLImageElement)) return;
-    secondImage.src = `/files/${result[`${value}File`]}`;
-    const referenceInput = item.querySelector(
-      `input[name="reference"][value="${value}"]`
-    );
-    if (!(referenceInput instanceof HTMLInputElement)) return;
-    referenceInput.checked = true;
-  });
+  if (value !== "current" && value !== "diff") return;
+  toggleDiffMode(value);
 });
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "c" || event.key === "d") {
     const value = event.key === "c" ? "current" : "diff";
-    const referenceInput = document.querySelector(
-      `input[name="reference"][value="${value}"]`
-    );
-    if (!(referenceInput instanceof HTMLInputElement)) return;
-    referenceInput.dispatchEvent(new Event("change", { bubbles: true }));
+    toggleDiffMode(value);
   } else if (event.key === "j") {
     const currentHash = window.location.hash;
     const currentLink = document.querySelector(`nav a[href="${currentHash}"]`);

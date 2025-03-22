@@ -86,6 +86,10 @@ section {
       > img[slot] {
         margin: auto;
         max-width: 100cqw;
+
+        &[hidden] {
+          display: none;
+        }
       }
     }
   }

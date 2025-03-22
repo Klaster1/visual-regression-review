@@ -5,9 +5,10 @@ import { readdirSync } from "node:fs";
 import { rename, unlink } from "node:fs/promises";
 import { resolve } from "node:path";
 import { template } from "./web/template.ts";
+import type { Result } from "./types.ts";
 
 export const server = (port: number, path: string) => {
-  const getResults = () => {
+  const getResults = (): Result[] => {
     const regex = /(?<name>.*?).(?<type>reference|current|diff).png/;
     const files = readdirSync(`${path}`);
     return files.flatMap((file, index, all) => {
@@ -20,6 +21,7 @@ export const server = (port: number, path: string) => {
       if (!diffFile) return [];
       const currentFile =
         all.find((f) => f.includes(`${name}.current.png`)) ?? null;
+      if (!currentFile) return [];
       return [
         {
           name,
