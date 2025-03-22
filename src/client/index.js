@@ -139,3 +139,19 @@ await fetch("/results")
       handleHashChange();
     }
   );
+
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        history.replaceState(null, "", `#${entry.target.id}`);
+        handleHashChange();
+      }
+    });
+  },
+  { threshold: [0.1] }
+);
+
+document.querySelectorAll("h1").forEach((heading) => {
+  observer.observe(heading);
+});
