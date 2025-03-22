@@ -1,6 +1,6 @@
 # Visual regression review
 
-A tool to review visual regression screenshots.
+A tool to review visual regression screenshots. Not very polished and has bugs.
 
 ![Visual Regression Review Screenshot](screenshot.png)
 
