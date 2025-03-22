@@ -1,6 +1,7 @@
 {
   "name": "@klaster1/visual-regression-review",
   "version": "1.0.0",
+  "description": "Visual regression screenshot review tool",
   "main": "src/index.ts",
   "bin": {
     "vrr": "src/index.ts"
@@ -11,9 +12,8 @@
   "exports": "./src/index.ts",
   "type": "module",
   "keywords": [],
-  "author": "",
+  "author": "Ilya Borisov <klaster1@gmail.com>",
   "license": "MIT",
-  "description": "",
   "dependencies": {
     "@types/express": "^5.0.1",
     "@types/node": "^22.13.11",
@@ -27,5 +27,9 @@
   },
   "engines": {
     "node": ">=23.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Klaster1/visual-regression-review"
   }
 }
