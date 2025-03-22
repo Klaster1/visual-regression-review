@@ -15,11 +15,7 @@ interface Result {
 export const server = (port: number, path: string) => {
   express()
     .use(express.json())
-    .get("/", (req, res) => {
-      res.sendFile("./client/index.html", {
-        root: resolve(import.meta.dirname, ".."),
-      });
-    })
+    .use(express.static(resolve(import.meta.dirname, "..", "client")))
     .get("/files/:file", async (req, res) => {
       res.sendFile(`${req.params.file}`, {
         root: path,
