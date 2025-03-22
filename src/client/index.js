@@ -119,3 +119,14 @@ document.addEventListener("keydown", (event) => {
     }
   }
 });
+window.addEventListener("hashchange", () => {
+  const oldCurrent = document.querySelector("a.active");
+  if (oldCurrent instanceof HTMLAnchorElement) {
+    oldCurrent.classList.remove("active");
+  }
+
+  const currentHash = window.location.hash;
+  const anchor = document.querySelector(`a[href="${currentHash}"]`);
+  if (!(anchor instanceof HTMLAnchorElement)) return;
+  anchor.classList.add("active");
+});

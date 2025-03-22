@@ -25,6 +25,10 @@ aside {
 
       li {
         margin-bottom: 0.5em;
+
+        a.active {
+          outline: 1px solid;
+        }
       }
     }
   }
