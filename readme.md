@@ -12,10 +12,6 @@ cd visual-regression-review
 npm i
 ```
 
-```
-npm i -g https://github.com/Klaster1/visual-regression-review
-```
-
 Usage:
 
 1. Start VRR: `node /path/to/visual-regression-review/src/index.ts --path="c:\dev\my-projects\visual-regression`.
